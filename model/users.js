@@ -1,5 +1,5 @@
 // queries.js
-const pool = require("../config/database"); // your PG pool
+const {pool} = require("../config/database"); // your PG pool
 
 module.exports = {
 

@@ -1,11 +1,11 @@
 require('dotenv').config();
 const express = require('express');
-const pool = require('./config/database');
+const { pool, dbConnect } = require('./config/database');
 const router = require('./routes/route');
-const app = express();
 
+const app = express();
 app.use(express.json());
-app.use('/api',router);
+app.use('/api', router);
 
 app.get("/users", async (req, res) => {
   try {
@@ -17,7 +17,11 @@ app.get("/users", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000
-app.listen(PORT, () => {
-    console.log(`Server started successfully at PORT: ${PORT}`)
-})
+const PORT = process.env.PORT || 3000;
+
+(async () => {
+  await dbConnect();
+  app.listen(PORT, () => {
+    console.log(`🚀 Server started successfully at PORT: ${PORT}`);
+  });
+})();
