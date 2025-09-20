@@ -8,6 +8,7 @@ const pool = new Pool({
     port: process.env.PG_PORT
 });
 const dbConnect = async () => {
+    
     try {
         const client = await pool.connect()
         console.log('✅ Successfully connected to PostgreSQL');
@@ -15,12 +16,12 @@ const dbConnect = async () => {
     } catch (error) {
         console.error('❌ Connection error:', error.message);
         console.log(error)
-        // process.exit(1);
+        process.exit(1);
     }
 
     pool.on("error", (error) => {
         console.error("⚠️ Unexpected PG error", error);
-        // process.exit(-1);
+        process.exit(-1);
     });
 
 }

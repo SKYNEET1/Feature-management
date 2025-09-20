@@ -1,6 +1,6 @@
-const { emailCheck } = require("../service/user.service");
-const { comparePassword } = require("../utils/hash");
-const { generateAccessToken, generateRefreshToken } = require('../utils/jwt')
+const { emailCheck } = require("../../service/user.service");
+const { comparePassword } = require("../../utils/hash");
+const { generateAccessToken, generateRefreshToken } = require('../../utils/jwt');
 
 exports.userLogin = async (req, res) => {
     try {
@@ -8,7 +8,7 @@ exports.userLogin = async (req, res) => {
         const { email, password } = req.body;
         const isuser = await emailCheck(email);
         if (!isuser) {
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
                 message: 'User with this email is not registered yet'
             })
@@ -16,14 +16,14 @@ exports.userLogin = async (req, res) => {
 
         const confirmPassword = comparePassword(password, isuser.password);
         if (!confirmPassword) {
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
                 message: 'Please enter a valid password'
             })
         }
 
-        const accessToken = generateAccessToken(isuser.user_id, isuser.role);
-        const refreshToken = generateRefreshToken(isuser.user_id);
+        const accessToken = generateAccessToken(isuser.user_id, isuser.role, email);
+        const refreshToken = generateRefreshToken(isuser.user_id, email);
 
         if (!accessToken) {
             return res.status(400).json({

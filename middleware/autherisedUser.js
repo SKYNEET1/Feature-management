@@ -24,10 +24,14 @@ exports.authenticateUser = async (req, res, next) => {
                 success: false,
                 message: 'Could not fetch the payload from token'
             })
-            req.user = decode
-            next();
         }
+        req.user = decode
+        console.log('in jwt verify')
+        console.log(decode)
+        next();
+
     } catch (error) {
+
         console.log(error)
         if (error.name === 'TokenExpiredError') {
             return res.status(401).json({
@@ -41,5 +45,6 @@ exports.authenticateUser = async (req, res, next) => {
             message: 'Invalid token',
             error: error.message
         });
+        
     }
 }
